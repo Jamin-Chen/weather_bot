@@ -69,8 +69,11 @@ function getWeather(lat, lng) {
     query.exec(function(err, data) {
       var location = data.query.results.channel.location;
       var condition = data.query.results.channel.item.condition;
-
-      console.log('The current weather in ' + location.city + ', ' + location.region + ' is ' + condition.temp + ' degrees.');
+      if (location && condition) {
+          console.log('The current weather in ' + location.city + ', ' + location.region + ' is ' + condition.temp + ' degrees.');
+      } else {
+          console.log ('Failed to get a response from Yahoo weather!')
+      }
   });
  };
 
