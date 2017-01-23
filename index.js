@@ -6,7 +6,6 @@ var app = express();
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
-createGreeting();
 app.listen((process.env.PORT || 3000));
 
 var APPID = '';	// Your Yahoo Application ID
