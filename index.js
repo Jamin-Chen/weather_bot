@@ -64,7 +64,7 @@ app.post('/webhook', function (req, res) {
 });
 
 function getWeather(lat, lng) {
-    var query = new yql("select * from weather.forecast where (location = {" + lat + "},{" + lng + "})");
+    var query = new yql("select * from weather.forecast where woeid in (SELECT woeid FROM geo.places WHERE text="(lat,lng)")");
     query.exec(function(err, data) {
       var location = data.query.results.channel.location;
       var condition = data.query.results.channel.item.condition;
