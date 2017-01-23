@@ -33,7 +33,7 @@ app.post('/webhook', function (req, res) {
         let sender = event.sender.id;
         if (event.message) {
             if (event.message.text) {
-
+                sendTextMessage(sender, "yo");
             }
         }
     }
