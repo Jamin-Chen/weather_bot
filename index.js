@@ -1,7 +1,8 @@
 var express = require('express'),
     bodyParser = require('body-parser'),
     request = require('request'),
-    path = require('path');
+    path = require('path'),
+    yql = require('yql');
 var app = express();
 
 var userState = {};
@@ -49,14 +50,28 @@ app.post('/webhook', function (req, res) {
                         lng = event.message.attachments[0].payload.coordinates.long;
                         console.log(lat);
                         console.log(lng);
+                        getWeather(lat, lng);
                         userState[sender] = 0;
                         break;
-                }
+                    }
+            } else {
+                console.log("error, undefined message");
+                sendTextMessage(sender, "Sorry, I couldn't quite understand you.");
             }
         }
     }
     res.sendStatus(200);
 });
+
+function getWeather(lat, lng) {
+    var query = new YQL("select * from weather.forecast where (location = {" + lat + "},{" + long + "})");
+    query.exec(function(err, data) {
+      var location = data.query.results.channel.location;
+      var condition = data.query.results.channel.item.condition;
+
+      console.log('The current weather in ' + location.city + ', ' + location.region + ' is ' + condition.temp + ' degrees.');
+  });
+ };
 
 // generic function sending messages
 function sendMessage(recipientId, message) {
