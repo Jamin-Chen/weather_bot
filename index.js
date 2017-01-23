@@ -51,7 +51,6 @@ app.post('/webhook', function (req, res) {
                         console.log(lat);
                         console.log(lng);
                         getWeather(lat, lng);
-                        userState[sender] = 0;
                         break;
                     }
             } else {
