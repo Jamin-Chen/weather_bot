@@ -6,7 +6,7 @@ var app = express();
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
-
+createGreeting();
 app.listen((process.env.PORT || 3000));
 
 var APPID = '';	// Your Yahoo Application ID
@@ -64,7 +64,7 @@ function sendTextMessage(recipientId, text) {
     sendMessage(recipientId, {text:text});
 };
 
-function createGreeting(data) {
+function createGreeting() {
     request({
         url: 'https://graph.facebook.com/v2.6/me/thread_settings',
         qs: { access_token: process.env.PAGE_ACCESS_TOKEN },
