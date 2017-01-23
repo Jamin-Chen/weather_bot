@@ -4,6 +4,8 @@ var express = require('express'),
     path = require('path');
 var app = express();
 
+var userState = {};
+
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.listen((process.env.PORT || 3000));
@@ -33,7 +35,23 @@ app.post('/webhook', function (req, res) {
         let sender = event.sender.id;
         if (event.message) {
             if (event.message.text) {
-                sendTextMessage(sender, "yo");
+                if (typeof(userState[sender]) === 'undefined') {
+                    sendTextMessage(sender, "Hi, I'm WeatherBot. Let's get started!");
+                    promptLocation(sender);
+                    userState[sender] = "SET_LOCATION";
+                }
+            } else if (event.message.attachments[0].payload.coordinates) {
+                // handle LOCATION messages
+                console.log("location received");
+                switch (userState[sender]) {
+                    case "SET_LOCATION":
+                        lat = event.message.attachments[0].payload.coordinates.lat;
+                        lng = event.message.attachments[0].payload.coordinates.long;
+                        console.log(lat);
+                        console.log(lng);
+                        userState[sender] = 0;
+                        break;
+                }
             }
         }
     }
@@ -88,7 +106,7 @@ function createGreeting() {
 
 function promptLocation(recipientId) {
     sendMessage(recipientId, {
-        "text":"Where would you like to set the new location?",
+        "text":"Where are you located?",
         "quick_replies":[
           {
             "content_type":"location",
