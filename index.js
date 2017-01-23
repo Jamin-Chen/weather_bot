@@ -15,7 +15,7 @@ app.get('/', function (request, response) {
 
 app.get('/webhook', function (request, response) {
     // verification function
-    if (request.query['hub.verify_token'] === 'testbot_verify_token') {
+    if (request.query['hub.verify_token'] === 'weatherbot_verify_token') {
         response.send(request.query['hub.challenge']);
     } else {
         response.send('Invalid verify token');
