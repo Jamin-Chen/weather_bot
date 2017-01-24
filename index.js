@@ -71,7 +71,7 @@ function getWeather(lat, lng) {
         } else if (response.statusCode !== 200) {
             return console.log('Invalid status code:', response.statusCode)
         } else {
-            console.log(body.latitude);
+            console.log(body);
         }
     })
  };
