@@ -53,7 +53,8 @@ app.post('/webhook', function (req, res) {
                         console.log(lat);
                         console.log(lng);
                         weatherData = getWeather(lat, lng);
-                        console.log(weatherData.hourly.summary)
+                        console.log(weatherData.hourly.summary);
+                        console.log(weatherData.hourly.summary.data[0].summary);
                         break;
                     }
             } else {
