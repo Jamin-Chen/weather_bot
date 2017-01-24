@@ -6,6 +6,7 @@ var express = require('express'),
 var app = express();
 
 var userState = {};
+var weatherData;
 var apiKey = 'bbadefd60b9bac38f09923a97dc42316';
 
 app.use(bodyParser.urlencoded({extended: false}));
@@ -51,7 +52,7 @@ app.post('/webhook', function (req, res) {
                         lng = event.message.attachments[0].payload.coordinates.long;
                         console.log(lat);
                         console.log(lng);
-                        getWeather(lat, lng);
+                        weatherData = getWeather(lat, lng);
                         break;
                     }
             } else {
@@ -74,7 +75,9 @@ function getWeather(lat, lng) {
         } else if (response.statusCode !== 200) {
             return console.log('Invalid status code:', response.statusCode)
         } else {
-            console.log(body);
+            var weatherData = JSON.parse(body);
+            console.log(data);
+            return weatherData;
         }
     })
  };
