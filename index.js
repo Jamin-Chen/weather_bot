@@ -65,7 +65,10 @@ app.post('/webhook', function (req, res) {
 
 function getWeather(lat, lng) {
     url = 'https://api.darksky.net/forecast/' + apiKey + '/' + lat + ',' + lng;
-    request(url, function (error, response, body) {
+    request({
+        url: url,
+        method: 'GET',
+    }, function (error, response, body) {
         if (error) {
             return console.log('Error:', error);
         } else if (response.statusCode !== 200) {
