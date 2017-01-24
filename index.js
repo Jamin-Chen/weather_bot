@@ -77,7 +77,7 @@ function getWeather(lat, lng) {
         } else {
             var weatherData = JSON.parse(body);
             console.log(weatherData.hourly.summary);
-            console.log(weatherData.hourly.summary.data[0].summary);
+            console.log(weatherData.hourly.data[0].summary);
             return weatherData;
         }
     })
