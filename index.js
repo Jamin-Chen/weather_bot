@@ -53,8 +53,6 @@ app.post('/webhook', function (req, res) {
                         console.log(lat);
                         console.log(lng);
                         weatherData = getWeather(lat, lng);
-                        console.log(weatherData.hourly.summary);
-                        console.log(weatherData.hourly.summary.data[0].summary);
                         break;
                     }
             } else {
@@ -78,6 +76,8 @@ function getWeather(lat, lng) {
             return console.log('Invalid status code:', response.statusCode)
         } else {
             var weatherData = JSON.parse(body);
+            console.log(weatherData.hourly.summary);
+            console.log(weatherData.hourly.summary.data[0].summary);
             return weatherData;
         }
     })
