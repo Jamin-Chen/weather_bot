@@ -78,7 +78,6 @@ function getWeather(lat, lng) {
             return console.log('Invalid status code:', response.statusCode)
         } else {
             var weatherData = JSON.parse(body);
-            console.log(weatherData);
             return weatherData;
         }
     })
