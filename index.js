@@ -6,6 +6,7 @@ var express = require('express'),
 var app = express();
 
 var userState = {};
+var apiKey = 'bbadefd60b9bac38f09923a97dc42316';
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
@@ -63,18 +64,16 @@ app.post('/webhook', function (req, res) {
 });
 
 function getWeather(lat, lng) {
-    var queryString = "select * from weather.forecast where woeid in (SELECT woeid FROM geo.places WHERE text=\"("+lat+","+lng+")\")";
-    console.log(queryString);
-    var query = new yql(queryString);
-    query.exec(function(err, data) {
-      var location = data.query.results.channel.location;
-      var condition = data.query.results.channel.item.condition;
-      if (location && condition) {
-          console.log('The current weather in ' + location.city + ', ' + location.region + ' is ' + condition.temp + ' degrees.');
-      } else {
-          console.log ('Failed to get a response from Yahoo weather!')
-      }
-  });
+    url = 'https://api.darksky.net/forecast/${apiKey}/${lat},${lng}';
+    request(url, function (error, response, body) {
+        if (error) {
+            return console.log('Error:', error);
+        } else if (response.statusCode !== 200) {
+            return console.log('Invalid status code:', response.statusCode)
+        } else {
+            console.log(response);
+        }
+    })
  };
 
 // generic function sending messages
