@@ -96,13 +96,13 @@ function getWeather(sender, lat, lng) {
              time = i % 12;
              time = !time ? time : 12;
              time = (time < 10) ? "0" + time : time;
-             rainTimes.push(time);
+             rainTimes.push(i);
          } else if (!hour.precipIntensity && precipitating) {
              precipitating = false;
              time = i % 12;
              time = !time ? time : 12;
              time = (time < 10) ? "0" + time : time;
-             rainTimes.push(time);
+             rainTimes.push(i);
          }
      }
      for (var i = 0; i < rainTimes.length; i++){
