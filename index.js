@@ -87,6 +87,9 @@ function getWeather(sender, lat, lng) {
      var rainTimes = [];
      var rainMsg = 'undefined';
      var precipitating = false;
+     var intensity = 0;
+     var probability = 0;
+     var n = 0;
      for (var i = 0; i < 24; i++){
          let hour = weatherData.hourly.data[i];
          let time = "";
@@ -103,23 +106,37 @@ function getWeather(sender, lat, lng) {
              precipitating = false;
              console.log(i);
              rainTimes.push(time);
-         } else if (i == 23 && precipitating) {
+         } else if (i == 23 && hour.precipIntensity && precipitating) {
              console.log(i);
              rainTimes.push(time);
          }
+         if (precipitating) {
+             intensity += hour.precipIntensity;
+             probability += hour.precipProbability;
+             n++;
+         }
      }
+     intensity /= parseFloat(n);
+     probability /= parseFloat(n);
      for (var i = 0; i < rainTimes.length; i++){
          console.log(rainTimes[i]);
+     }
+     if (probability < 0.25) {
+         rainMsg = "There is a small chance that it will "
+     } else if (probability < 0.5) {
+         rainMsg = "It might "
+     } else {
+         rainMsg = "It will "
      }
      if (rainTimes.length == 0) {
          rainMsg = "It will not rain today!"
      } else if (rainTimes.length == 3) {
-         rainMsg = "It will " + rainTimes[0] + " today between " + rainTimes[1] + " and " + rainTimes[2] + ". ";
+         rainMsg += rainTimes[0] + " today between " + rainTimes[1] + " and " + rainTimes[2] + ". ";
      } else if (rainTimes.length == 6) {
          if (rainTimes[0] == rainTimes[3]) {
-             rainMsg = "It will " + rainTimes[0] + " today from " + rainTimes[1] + " to " + rainTimes[2] + " and " + rainTimes[4] + " to " + rainTimes[5] + ".";
+             rainMsg += rainTimes[0] + " today from " + rainTimes[1] + " to " + rainTimes[2] + " and " + rainTimes[4] + " to " + rainTimes[5] + ".";
          } else {
-             rainMsg = "It will " + rainTimes[0] + " today from " + rainTimes[1] + " to " + rainTimes[2] + " and " + rainTimes[3] + " from " + rainTimes[4] + " to " + rainTimes[5] + ".";
+             rainMsg += rainTimes[0] + " today from " + rainTimes[1] + " to " + rainTimes[2] + " and " + rainTimes[3] + " from " + rainTimes[4] + " to " + rainTimes[5] + ".";
          }
      } else {
          rainMsg = "Today it will " + rainTimes[0] + " from " + rainTimes[1] + " to " + rainTimes[2] + ", ";
