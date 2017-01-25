@@ -78,7 +78,7 @@ function getWeather(sender, lat, lng) {
         } else {
             var weatherData = JSON.parse(body);
             console.log(weatherData);
-            return checkRain(weatherData);
+            return checkRain(sender, weatherData);
         }
     })
  };
