@@ -93,7 +93,6 @@ function getWeather(sender, lat, lng) {
          let ampm = i < 12 ? " AM" : " PM";;
          time = i % 12;
          time = time ? time : 12;
-         time = (time < 10) ? "0" + time : time;
          time += ampm;
          if (hour.precipIntensity && !precipitating) {
              precipitating = true;
