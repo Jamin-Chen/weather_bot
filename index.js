@@ -53,7 +53,7 @@ app.post('/webhook', function (req, res) {
                     case "SET_LOCATION":
                         userData[sender].lat = event.message.attachments[0].payload.coordinates.lat;
                         userData[sender].lng = event.message.attachments[0].payload.coordinates.long;
-                        sendTextMessage(sender, checkRain(getWeather(userData[sender].lat, userData[sender].lng)));
+                        getWeather(sender, lat, lng);
                         break;
                     }
             } else {
@@ -65,7 +65,7 @@ app.post('/webhook', function (req, res) {
     res.sendStatus(200);
 });
 
-function getWeather(lat, lng) {
+function getWeather(sender, lat, lng) {
     url = 'https://api.darksky.net/forecast/' + apiKey + '/' + lat + ',' + lng;
     request({
         url: url,
@@ -77,12 +77,12 @@ function getWeather(lat, lng) {
             return console.log('Invalid status code:', response.statusCode)
         } else {
             var weatherData = JSON.parse(body);
-            return weatherData;
+            return checkRain(weatherData);
         }
     })
  };
 
- function checkRain(weatherData){
+ function checkRain(sender, weatherData){
      var rainTimes = [];
      var rainMsg = 'undefined';
      var precipitating = false;
@@ -120,7 +120,7 @@ function getWeather(lat, lng) {
              rainMsg += rainTimes[i + 1] + " to " + rainTimes[i + 2];
          }
      }
-     return rainMsg;
+     return sendTextMessage(sender, rainMsg);
  }
 
 // generic function sending messages
