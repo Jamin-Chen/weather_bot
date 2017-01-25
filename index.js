@@ -84,28 +84,25 @@ function getWeather(sender, lat, lng) {
  };
 
  function checkRain(sender, weatherData){
-     console.log("here");
      var rainTimes = [];
      var rainMsg = 'undefined';
      var precipitating = false;
-     var time;
      for (var i = 0; i < 24; i++){
-         var hour = weatherData.hourly.data[i];
+         let hour = weatherData.hourly.data[i];
+         let time = "";
+         let ampm = i < 12 ? " AM" : " PM";;
+         time = i % 12;
+         time = !time ? time : 12;
+         time = (time < 10) ? "0" + time : time;
+         time += ampm;
          if (hour.precipIntensity && !precipitating) {
              precipitating = true;
              rainTimes.push(hour.precipType);
-             time = i % 12;
-             time = !time ? time : 12;
-             time = (time < 10) ? "0" + time : time;
-             rainTimes.push(i);
+             rainTimes.push(time);
          } else if (!hour.precipIntensity && precipitating) {
-             precipitating = false;
-             time = i % 12;
-             time = !time ? time : 12;
-             time = (time < 10) ? "0" + time : time;
-             rainTimes.push(i);
+             rainTimes.push(time);
          } else if (i == 23 && precipitating) {
-             rainTimes.push(i);
+             rainTimes.push(time);
          }
      }
      for (var i = 0; i < rainTimes.length; i++){
