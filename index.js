@@ -104,9 +104,9 @@ function getWeather(sender, lat, lng) {
              rainTimes.push(string(i));
          }
      }
-     if (rainTimes.length() == 3) {
+     if (rainTimes.length == 3) {
          rainMsg = "It will " + rainTimes[0] + " today between " + rainTimes[1] + " and " + rainTimes[2] + ". ";
-     } else if (rainTimes.length() == 6) {
+     } else if (rainTimes.length == 6) {
          if (rainTimes[0] == rainTimes[3]) {
              rainMsg = "It will " + rainTimes[0] + " today from " + rainTimes[1] + " to " + rainTimes[2] + " and " + rainTimes[4] + " to " + rainTimes[5] + ".";
          } else {
@@ -114,14 +114,18 @@ function getWeather(sender, lat, lng) {
          }
      } else {
          rainMsg = "Today it will " + rainTimes[0] + " from " + rainTimes[1] + " to " + rainTimes[2] + ", ";
-         for (var i = 3; i < rainTimes.length(); i += 3) {
+         for (var i = 3; i < rainTimes.length; i += 3) {
              if (rainTimes[i] != rainTimes[i - 3]) {
                  rainMsg += rainTimes[i] + " from ";
              }
              rainMsg += rainTimes[i + 1] + " to " + rainTimes[i + 2];
          }
      }
-     return sendTextMessage(sender, rainMsg);
+     if (rainMsg != 'undefined') {
+         return sendTextMessage(sender, rainMsg);
+     } else {
+         return null;
+     }
  }
 
 // generic function sending messages
