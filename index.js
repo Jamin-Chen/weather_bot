@@ -77,13 +77,13 @@ function getWeather(sender, lat, lng) {
             return console.log('Invalid status code:', response.statusCode)
         } else {
             var weatherData = JSON.parse(body);
-            console.log(weatherData);
             return checkRain(sender, weatherData);
         }
     })
  };
 
  function checkRain(sender, weatherData){
+     console.log("here");
      var rainTimes = [];
      var rainMsg = 'undefined';
      var precipitating = false;
