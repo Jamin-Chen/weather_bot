@@ -38,7 +38,8 @@ app.post('/webhook', function (req, res) {
         let sender = event.sender.id;
         if (event.message) {
             if (event.message.text) {
-                if (typeof(userData[sender][state]) === 'undefined') {
+                if (typeof(userData[sender]) === 'undefined') {
+                    userData[sender] = {};
                     sendTextMessage(sender, "Hi, I'm WeatherBot. Let's get started!");
                     promptLocation(sender);
                     userData[sender][state] = "SET_LOCATION";
