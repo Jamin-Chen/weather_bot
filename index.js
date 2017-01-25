@@ -95,13 +95,13 @@ function getWeather(sender, lat, lng) {
              i = i % 12;
              i = i ? i : 12;
              i = (i < 10) ? "0" + i : i;
-             rainTimes.push(string(i));
+             rainTimes.push(i);
          } else if (precipitating) {
              precipitating = false;
              i = i % 12;
              i = i ? i : 12;
              i = (i < 10) ? "0" + i : i;
-             rainTimes.push(string(i));
+             rainTimes.push(i);
          }
      }
      if (rainTimes.length == 3) {
