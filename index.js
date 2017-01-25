@@ -96,7 +96,7 @@ function getWeather(sender, lat, lng) {
              i = i ? i : 12;
              i = (i < 10) ? "0" + i : i;
              rainTimes.push(string(i));
-         } else if (raining) {
+         } else if (precipitating) {
              precipitating = false;
              i = i % 12;
              i = i ? i : 12;
