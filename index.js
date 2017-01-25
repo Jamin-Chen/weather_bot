@@ -104,6 +104,9 @@ function getWeather(sender, lat, lng) {
              rainTimes.push(i);
          }
      }
+     for (var i = 0; i < rainTimes.length; i++){
+         console.log(rainTimes[i]);
+     }
      if (rainTimes.length == 3) {
          rainMsg = "It will " + rainTimes[0] + " today between " + rainTimes[1] + " and " + rainTimes[2] + ". ";
      } else if (rainTimes.length == 6) {
