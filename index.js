@@ -97,7 +97,7 @@ function getWeather(sender, lat, lng) {
              time = !time ? time : 12;
              time = (time < 10) ? "0" + time : time;
              rainTimes.push(time);
-         } else if (precipitating) {
+         } else if (!hour.precipIntensity && precipitating) {
              precipitating = false;
              time = i % 12;
              time = !time ? time : 12;
