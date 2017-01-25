@@ -94,15 +94,15 @@ function getWeather(sender, lat, lng) {
              precipitating = true;
              rainTimes.push(hour.precipType);
              time = i % 12;
-             time = time ? time : 12;
+             time = !time ? time : 12;
              time = (time < 10) ? "0" + time : time;
-             rainTimes.push(i);
+             rainTimes.push(time);
          } else if (precipitating) {
              precipitating = false;
              time = i % 12;
-             time = time ? time : 12;
+             time = !time ? time : 12;
              time = (time < 10) ? "0" + time : time;
-             rainTimes.push(i);
+             rainTimes.push(time);
          }
      }
      for (var i = 0; i < rainTimes.length; i++){
@@ -122,7 +122,7 @@ function getWeather(sender, lat, lng) {
              if (rainTimes[i] != rainTimes[i - 3]) {
                  rainMsg += rainTimes[i] + " from ";
              }
-             rainMsg += rainTimes[i + 1] + " to " + rainTimes[i + 2];
+             rainMsg += rainTimes[i + 1] + " to " + rainTimes[i + 2] + ", ";
          }
      }
      if (rainMsg != 'undefined') {
