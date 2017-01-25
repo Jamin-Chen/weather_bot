@@ -87,20 +87,21 @@ function getWeather(sender, lat, lng) {
      var rainTimes = [];
      var rainMsg = 'undefined';
      var precipitating = false;
+     var time;
      for (var i = 0; i < 23; i++){
-         let hour = weatherData.hourly.data[i];
+         var hour = weatherData.hourly.data[i];
          if (hour.precipIntensity && !precipitating) {
              precipitating = true;
              rainTimes.push(hour.precipType);
-             i = i % 12;
-             i = i ? i : 12;
-             i = (i < 10) ? "0" + i : i;
+             time = i % 12;
+             time = time ? time : 12;
+             time = (time < 10) ? "0" + time : time;
              rainTimes.push(i);
          } else if (precipitating) {
              precipitating = false;
-             i = i % 12;
-             i = i ? i : 12;
-             i = (i < 10) ? "0" + i : i;
+             time = i % 12;
+             time = time ? time : 12;
+             time = (time < 10) ? "0" + time : time;
              rainTimes.push(i);
          }
      }
