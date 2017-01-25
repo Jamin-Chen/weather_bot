@@ -98,10 +98,13 @@ function getWeather(sender, lat, lng) {
          if (hour.precipIntensity && !precipitating) {
              precipitating = true;
              rainTimes.push(hour.precipType);
+             console.log(i);
              rainTimes.push(time);
          } else if (!hour.precipIntensity && precipitating) {
+             console.log(i);
              rainTimes.push(time);
          } else if (i == 23 && precipitating) {
+             console.log(i);
              rainTimes.push(time);
          }
      }
