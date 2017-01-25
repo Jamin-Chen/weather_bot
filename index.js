@@ -47,7 +47,7 @@ app.post('/webhook', function (req, res) {
             } else if (event.message.attachments[0].payload.coordinates) {
                 // handle LOCATION messages
                 console.log("location received");
-                switch (userState[sender]) {
+                switch (userData[sender].state) {
                     case "SET_LOCATION":
                         userData[sender].lat = event.message.attachments[0].payload.coordinates.lat;
                         userData[sender].lng = event.message.attachments[0].payload.coordinates.long;
