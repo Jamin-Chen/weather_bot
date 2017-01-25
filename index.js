@@ -53,7 +53,7 @@ app.post('/webhook', function (req, res) {
                     case "SET_LOCATION":
                         userData[sender].lat = event.message.attachments[0].payload.coordinates.lat;
                         userData[sender].lng = event.message.attachments[0].payload.coordinates.long;
-                        getWeather(sender, lat, lng);
+                        getWeather(sender, userData[sender].lat, userData[sender].lng);
                         break;
                     }
             } else {
