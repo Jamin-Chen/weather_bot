@@ -88,7 +88,7 @@ function getWeather(sender, lat, lng) {
      var rainMsg = 'undefined';
      var precipitating = false;
      var time;
-     for (var i = 0; i < 23; i++){
+     for (var i = 0; i < 24; i++){
          var hour = weatherData.hourly.data[i];
          if (hour.precipIntensity && !precipitating) {
              precipitating = true;
@@ -102,6 +102,8 @@ function getWeather(sender, lat, lng) {
              time = i % 12;
              time = !time ? time : 12;
              time = (time < 10) ? "0" + time : time;
+             rainTimes.push(i);
+         } else if (i == 23 && precipitating) {
              rainTimes.push(i);
          }
      }
