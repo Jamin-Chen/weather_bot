@@ -101,6 +101,7 @@ function getWeather(sender, lat, lng) {
              console.log(i);
              rainTimes.push(time);
          } else if (!hour.precipIntensity && precipitating) {
+             precipitating = false;
              console.log(i);
              rainTimes.push(time);
          } else if (i == 23 && precipitating) {
