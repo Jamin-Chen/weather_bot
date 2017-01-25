@@ -108,7 +108,9 @@ function getWeather(sender, lat, lng) {
      for (var i = 0; i < rainTimes.length; i++){
          console.log(rainTimes[i]);
      }
-     if (rainTimes.length == 3) {
+     if (rainTimes.length == 0) {
+         rainMsg = "It will not rain today!"
+     } else if (rainTimes.length == 3) {
          rainMsg = "It will " + rainTimes[0] + " today between " + rainTimes[1] + " and " + rainTimes[2] + ". ";
      } else if (rainTimes.length == 6) {
          if (rainTimes[0] == rainTimes[3]) {
@@ -125,11 +127,7 @@ function getWeather(sender, lat, lng) {
              rainMsg += rainTimes[i + 1] + " to " + rainTimes[i + 2] + ", ";
          }
      }
-     if (rainMsg != 'undefined') {
-         return sendTextMessage(sender, rainMsg);
-     } else {
-         return null;
-     }
+     return sendTextMessage(sender, rainMsg);
  }
 
 // generic function sending messages
