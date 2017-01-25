@@ -5,7 +5,7 @@ var express = require('express'),
     yql = require('yql');
 var app = express();
 
-var userState = {};
+var userData = {};
 var weatherData;
 var apiKey = 'bbadefd60b9bac38f09923a97dc42316';
 
@@ -38,21 +38,19 @@ app.post('/webhook', function (req, res) {
         let sender = event.sender.id;
         if (event.message) {
             if (event.message.text) {
-                if (typeof(userState[sender]) === 'undefined') {
+                if (typeof(userData[sender].state) === 'undefined') {
                     sendTextMessage(sender, "Hi, I'm WeatherBot. Let's get started!");
                     promptLocation(sender);
-                    userState[sender] = "SET_LOCATION";
+                    userData[sender].state = "SET_LOCATION";
                 }
             } else if (event.message.attachments[0].payload.coordinates) {
                 // handle LOCATION messages
                 console.log("location received");
                 switch (userState[sender]) {
                     case "SET_LOCATION":
-                        lat = event.message.attachments[0].payload.coordinates.lat;
-                        lng = event.message.attachments[0].payload.coordinates.long;
-                        console.log(lat);
-                        console.log(lng);
-                        weatherData = getWeather(lat, lng);
+                        userData[sender].lat = event.message.attachments[0].payload.coordinates.lat;
+                        userData[sender].lng = event.message.attachments[0].payload.coordinates.long;
+                        sendTextMessage(sender, checkRain(getWeather(userData[sender].lat, userData[sender].lng)));
                         break;
                     }
             } else {
@@ -76,12 +74,51 @@ function getWeather(lat, lng) {
             return console.log('Invalid status code:', response.statusCode)
         } else {
             var weatherData = JSON.parse(body);
-            console.log(weatherData.hourly.summary);
-            console.log(weatherData.hourly.data[0].summary);
             return weatherData;
         }
     })
  };
+
+ function checkRain(weatherData){
+     var rainTimes = [];
+     var rainMsg = 'undefined';
+     var precipitating = false;
+     for (var i = 0; i < 23; i++){
+         let hour = weatherData.hourly.data[i];
+         if (hour.precipIntensity && !precipitating) {
+             precipitating = true;
+             rainTimes.push(hour.precipType);
+             i = i % 12;
+             i = i ? i : 12;
+             i = (i < 10) ? "0" + i : i;
+             rainTimes.push(string(i));
+         } else if (raining) {
+             precipitating = false;
+             i = i % 12;
+             i = i ? i : 12;
+             i = (i < 10) ? "0" + i : i;
+             rainTimes.push(string(i));
+         }
+     }
+     if (rainTimes.length() == 3) {
+         rainMsg = "It will " + rainTimes[0] + " today between " + rainTimes[1] + " and " + rainTimes[2] + ". ";
+     } else if (rainTimes.length() == 6) {
+         if (rainTimes[0] == rainTimes[3]) {
+             rainMsg = "It will " + rainTimes[0] + " today from " + rainTimes[1] + " to " + rainTimes[2] + " and " + rainTimes[4] + " to " + rainTimes[5] + ".";
+         } else {
+             rainMsg = "It will " + rainTimes[0] + " today from " + rainTimes[1] + " to " + rainTimes[2] + " and " + rainTimes[3] + " from " + rainTimes[4] + " to " + rainTimes[5] + ".";
+         }
+     } else {
+         rainMsg = "Today it will " + rainTimes[0] + " from " + rainTimes[1] + " to " + rainTimes[2] + ", ";
+         for (var i = 3; i < rainTimes.length(); i += 3) {
+             if (rainTimes[i] != rainTimes[i - 3]) {
+                 rainMsg += rainTimes[i] + " from ";
+             }
+             rainMsg += rainTimes[i + 1] + " to " + rainTimes[i + 2];
+         }
+     }
+     return rainMsg;
+ }
 
 // generic function sending messages
 function sendMessage(recipientId, message) {
