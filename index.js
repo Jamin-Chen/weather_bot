@@ -98,7 +98,7 @@ function getWeather(sender, lat, lng) {
          time = i % 12;
          time = time ? time : 12;
          time += ampm;
-         if (hour.precipIntensity && !precipitating) {
+         if (hour.precipIntensity && !precipitating && hour.precipProbability > 0.1) {
              // rain begin
              precipitating = true;
              rainTimes.push(hour.precipType);
@@ -120,7 +120,7 @@ function getWeather(sender, lat, lng) {
              rainTimes.push(" from 11 ");
              rainTimes.push(" and continue through the night");
          }
-         if (precipitating) {
+         if (precipitating && hour.precipProbability > 0.1) {
              intensity += hour.precipIntensity;
              probability += hour.precipProbability;
              n++;
