@@ -38,7 +38,6 @@ app.post('/webhook', function (req, res) {
         let sender = event.sender.id;
         if (event.message) {
             if (typeof(userData[sender]) === 'undefined') {
-                sendTextMessage(sender, "Hi, I'm WeatherBot. Let's get started!");
                 userData[sender] = {};
                 userData[sender].state = "SET_LOCATION";
             }
@@ -111,13 +110,13 @@ function getWeather(sender, lat, lng) {
          } else if (i == 23 && hour.precipIntensity && precipitating) {
              // raining already, will still rain
              console.log(i);
-             rainTimes.push(" and continue through the night.");
+             rainTimes.push(" and continue through the night");
          } else if (i == 23 && hour.precipIntensity && !precipitating) {
              // starts raining at 11, wasn't raining yet
              console.log(i);
              rainTimes.push(hour.precipType);
              rainTimes.push(" from 11 ");
-             rainTimes.push(" and continue through the night.");
+             rainTimes.push(" and continue through the night");
          }
          if (precipitating) {
              intensity += hour.precipIntensity;
@@ -178,32 +177,31 @@ function sendMessage(recipientId, message) {
     });
 };
 
-function sendTextMessage(recipientId, text) {
-    sendMessage(recipientId, {text:text});
-};
-
-function createGreeting() {
+function sendWelcomeMessage(recipientId) {
     request({
-        url: 'https://graph.facebook.com/v2.6/me/thread_settings',
-        qs: { access_token: process.env.PAGE_ACCESS_TOKEN },
+        url: 'https://graph.facebook.com/v2.6/me/messages',
+        qs: {access_token: process.env.PAGE_ACCESS_TOKEN},
         method: 'POST',
         json: {
-            "setting_type":"call_to_actions",
-              "thread_state":"new_thread",
-              "call_to_actions":[
-                {
-                  "payload":"USER_DEFINED_PAYLOAD"
-                }
-              ]
+            recipient: {id: recipientId},
+            message: {
+                text: "Hi, I'm WeatherBot. Let's get started!"
+            }
         }
-    }, function (error, response, body) {
+    }, function(error, response, body) {
         if (error) {
-            console.log('Error creating greeting: ', error);
+            console.log('Error sending message: ', error);
+        } else if (response.body.error) {
+            console.log('Error: ', response.body.error);
         } else {
-            console.error('Error: ', response.body.error);
+            return promptLocation(recipientId);
         }
     });
 }
+
+function sendTextMessage(recipientId, text) {
+    sendMessage(recipientId, {text:text});
+};
 
 function promptLocation(recipientId) {
     sendMessage(recipientId, {
