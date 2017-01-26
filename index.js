@@ -150,7 +150,7 @@ function getWeather(sender, lat, lng) {
              }
              rainMsg += rainTimes[i + 1] + rainTimes[i + 2] + ", ";
          }
-         rainMsg += " and"
+         rainMsg += "and"
          if (rainTimes[rainTimes.length - 3] != rainTimes[rainTimes.length - 6]) {
              rainMsg += rainTimes[rainTimes.length - 3];
          }
