@@ -40,11 +40,7 @@ app.post('/webhook', function (req, res) {
             if (typeof(userData[sender]) === 'undefined') {
                 userData[sender] = {};
                 userData[sender].state = "SET_LOCATION";
-            }
-            if (event.message.text) {
-                if (userData[sender].state === "SET_LOCATION") {
-                    promptLocation(sender);
-                }
+                sendWelcomeMessage(sender);
             } else if (event.message.attachments[0].payload.coordinates) {
                 // handle LOCATION messages
                 console.log("location received");
@@ -184,9 +180,7 @@ function sendWelcomeMessage(recipientId) {
         method: 'POST',
         json: {
             recipient: {id: recipientId},
-            message: {
-                text: "Hi, I'm WeatherBot. Let's get started!"
-            }
+            message: {text: "Hi, I'm WeatherBot. Let's get started!"}
         }
     }, function(error, response, body) {
         if (error) {
