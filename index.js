@@ -133,14 +133,16 @@ function getWeather(sender, lat, lng) {
      for (var i = 0; i < rainTimes.length; i++){
          console.log(rainTimes[i]);
      }
-     if (probability < 0.25) {
+
+     if (probability < 0.25 && probability > 0.10) {
          rainMsg = "There is a small chance that it will "
-     } else if (probability < 0.5) {
+     } else if (probability < 0.5 && probability >= 0.25) {
          rainMsg = "It might "
-     } else {
+     } else if (probability >= 0.5){
          rainMsg = "It will "
      }
-     if (rainTimes.length == 0) {
+
+     if (rainTimes.length == 0 || probability <= 0.10) {
          rainMsg = "It will not rain today! 🌞"
      } else if (rainTimes.length == 3) {
          rainMsg += rainTimes[0] + " today" + rainTimes[1] + rainTimes[2] + ". ";
