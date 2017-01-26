@@ -38,9 +38,15 @@ app.post('/webhook', function (req, res) {
         let sender = event.sender.id;
         if (event.message) {
             if (typeof(userData[sender]) === 'undefined') {
+                // first time visitor, initalize data
                 userData[sender] = {};
                 userData[sender].state = "SET_LOCATION";
                 sendWelcomeMessage(sender);
+            } else if (event.message.text) {
+                if (userData[sender].state === "SET_LOCATION") {
+                    sendTextMessage(sender, "Whoops, I'm not smart enough for language processing yet!");
+                    sendTextMessage(sender, "Please send me your location through messenger.");
+                }
             } else if (event.message.attachments[0].payload.coordinates) {
                 // handle LOCATION messages
                 console.log("location received");
@@ -103,11 +109,11 @@ function getWeather(sender, lat, lng) {
              precipitating = false;
              console.log(i);
              rainTimes.push(" to " + time);
-         } else if (i == 23 && hour.precipIntensity && precipitating) {
+         } else if (i === 23 && hour.precipIntensity && precipitating) {
              // raining already, will still rain
              console.log(i);
              rainTimes.push(" and continue through the night");
-         } else if (i == 23 && hour.precipIntensity && !precipitating) {
+         } else if (i === 23 && hour.precipIntensity && !precipitating) {
              // starts raining at 11, wasn't raining yet
              console.log(i);
              rainTimes.push(hour.precipType);
@@ -137,7 +143,7 @@ function getWeather(sender, lat, lng) {
      } else if (rainTimes.length == 3) {
          rainMsg += rainTimes[0] + " today" + rainTimes[1] + rainTimes[2] + ". ";
      } else if (rainTimes.length == 6) {
-         if (rainTimes[0] == rainTimes[3]) {
+         if (rainTimes[0] === rainTimes[3]) {
              rainMsg += rainTimes[0] + " today" + rainTimes[1] + rainTimes[2] + " and" + rainTimes[4] + rainTimes[5] + ".";
          } else {
              rainMsg += rainTimes[0] + " today" + rainTimes[1] + rainTimes[2] + " and" + rainTimes[3] + rainTimes[4] + rainTimes[5] + ".";
@@ -154,7 +160,7 @@ function getWeather(sender, lat, lng) {
          if (rainTimes[rainTimes.length - 3] != rainTimes[rainTimes.length - 6]) {
              rainMsg += rainTimes[rainTimes.length - 3];
          }
-         rainMsg += rainTimes[rainTimes.length - 2] + rainTimes[rainTimes.length - 1];
+         rainMsg += rainTimes[rainTimes.length - 2] + rainTimes[rainTimes.length - 1] + ".";
      }
      return sendTextMessage(sender, rainMsg);
  }
