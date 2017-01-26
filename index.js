@@ -140,7 +140,7 @@ function getWeather(sender, lat, lng) {
          rainMsg = "It will "
      }
      if (rainTimes.length == 0) {
-         rainMsg = "It will not rain today!"
+         rainMsg = "It will not rain today! 🌞"
      } else if (rainTimes.length == 3) {
          rainMsg += rainTimes[0] + " today" + rainTimes[1] + rainTimes[2] + ". ";
      } else if (rainTimes.length == 6) {
