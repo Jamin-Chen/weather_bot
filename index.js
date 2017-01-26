@@ -43,6 +43,7 @@ app.post('/webhook', function (req, res) {
                 userData[sender].state = "SET_LOCATION";
                 sendWelcomeMessage(sender);
             } else if (event.message.text) {
+                console.log("Received: " + event.message.text);
                 if (userData[sender].state === "SET_LOCATION") {
                     sendTextMessage(sender, "Whoops, I'm not smart enough for language processing yet!");
                     sendTextMessage(sender, "Please send me your location through messenger. 📍");
@@ -210,7 +211,7 @@ function sendTextMessage(recipientId, text) {
 
 function promptLocation(recipientId) {
     sendMessage(recipientId, {
-        "text":"Where are you located?",
+        "text":"Where are you located? 🌎",
         "quick_replies":[
           {
             "content_type":"location",
