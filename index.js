@@ -45,7 +45,7 @@ app.post('/webhook', function (req, res) {
             } else if (event.message.text) {
                 console.log("Received: " + event.message.text);
                 if (userData[sender].state === "SET_LOCATION") {
-                    sendTextMessage(sender, "Whoops, I'm not smart enough for language processing yet! Please send me your location through messenger. 📍");
+                    sendTextMessage(sender, "Whoops, I'm not smart enough to read that! Please send me your location through messenger. 📍");
                 }
             } else if (event.message.attachments[0].payload.coordinates) {
                 // handle LOCATION messages
@@ -128,6 +128,8 @@ function getWeather(sender, lat, lng) {
      }
      intensity /= parseFloat(n);
      probability /= parseFloat(n);
+     console.log("intensity: " + intensity);
+     console.log("probability: " + probability)
      for (var i = 0; i < rainTimes.length; i++){
          console.log(rainTimes[i]);
      }
