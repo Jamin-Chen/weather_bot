@@ -143,14 +143,14 @@ function getWeather(sender, lat, lng) {
              rainMsg += rainTimes[0] + " today" + rainTimes[1] + rainTimes[2] + " and" + rainTimes[3] + rainTimes[4] + rainTimes[5] + ".";
          }
      } else {
-         rainMsg = "Today it will " + rainTimes[0] + rainTimes[1] + rainTimes[2] + ", ";
+         rainMsg = "Today it will " + rainTimes[0] + rainTimes[1] + rainTimes[2] + ",";
          for (var i = 3; i < rainTimes.length - 3; i += 3) {
              if (rainTimes[i] != rainTimes[i - 3]) {
                  rainMsg += rainTimes[i];
              }
-             rainMsg += rainTimes[i + 1] + rainTimes[i + 2] + ", ";
+             rainMsg += rainTimes[i + 1] + rainTimes[i + 2] + ",";
          }
-         rainMsg += "and"
+         rainMsg += " and"
          if (rainTimes[rainTimes.length - 3] != rainTimes[rainTimes.length - 6]) {
              rainMsg += rainTimes[rainTimes.length - 3];
          }
