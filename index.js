@@ -98,17 +98,26 @@ function getWeather(sender, lat, lng) {
          time = time ? time : 12;
          time += ampm;
          if (hour.precipIntensity && !precipitating) {
+             // rain begin
              precipitating = true;
              rainTimes.push(hour.precipType);
              console.log(i);
-             rainTimes.push(time);
+             rainTimes.push(" from " + time);
          } else if (!hour.precipIntensity && precipitating) {
+             // rain end
              precipitating = false;
              console.log(i);
-             rainTimes.push(time);
+             rainTimes.push(" to " + time);
          } else if (i == 23 && hour.precipIntensity && precipitating) {
+             // raining already, will still rain
              console.log(i);
-             rainTimes.push(time);
+             rainTimes.push(" and continue through the night.");
+         } else if (i == 23 && hour.precipIntensity && !precipitating) {
+             // starts raining at 11, wasn't raining yet
+             console.log(i);
+             rainTimes.push(hour.precipType);
+             rainTimes.push(" from 11 ");
+             rainTimes.push(" and continue through the night.");
          }
          if (precipitating) {
              intensity += hour.precipIntensity;
@@ -131,20 +140,20 @@ function getWeather(sender, lat, lng) {
      if (rainTimes.length == 0) {
          rainMsg = "It will not rain today!"
      } else if (rainTimes.length == 3) {
-         rainMsg += rainTimes[0] + " today between " + rainTimes[1] + " and " + rainTimes[2] + ". ";
+         rainMsg += rainTimes[0] + " today " + rainTimes[1] + rainTimes[2] + ". ";
      } else if (rainTimes.length == 6) {
          if (rainTimes[0] == rainTimes[3]) {
-             rainMsg += rainTimes[0] + " today from " + rainTimes[1] + " to " + rainTimes[2] + " and " + rainTimes[4] + " to " + rainTimes[5] + ".";
+             rainMsg += rainTimes[0] + " today " + rainTimes[1] + rainTimes[2] + " and " + rainTimes[4] + rainTimes[5] + ".";
          } else {
-             rainMsg += rainTimes[0] + " today from " + rainTimes[1] + " to " + rainTimes[2] + " and " + rainTimes[3] + " from " + rainTimes[4] + " to " + rainTimes[5] + ".";
+             rainMsg += rainTimes[0] + " today " + rainTimes[1] + rainTimes[2] + " and " + rainTimes[3] + rainTimes[4] + rainTimes[5] + ".";
          }
      } else {
-         rainMsg = "Today it will " + rainTimes[0] + " from " + rainTimes[1] + " to " + rainTimes[2] + ", ";
+         rainMsg = "Today it will " + rainTimes[0] + rainTimes[1] + rainTimes[2] + ", ";
          for (var i = 3; i < rainTimes.length; i += 3) {
              if (rainTimes[i] != rainTimes[i - 3]) {
-                 rainMsg += rainTimes[i] + " from ";
+                 rainMsg += rainTimes[i];
              }
-             rainMsg += rainTimes[i + 1] + " to " + rainTimes[i + 2] + ", ";
+             rainMsg += rainTimes[i + 1] + rainTimes[i + 2] + ", ";
          }
      }
      return sendTextMessage(sender, rainMsg);
