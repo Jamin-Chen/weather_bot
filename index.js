@@ -67,7 +67,7 @@ app.post('/webhook', function (req, res) {
 });
 
 function getWeather(sender, lat, lng) {
-    url = 'https://api.darksky.net/forecast/' + apiKey + '/' + lat + ',' + lng;
+    url = 'https://api.darksky.net/forecast/' + apiKey + '/' + lat + ',' + lng + ',' + Date.now();
     console.log(url);
     request({
         url: url,
