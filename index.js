@@ -51,7 +51,7 @@ app.post('/webhook', function (req, res) {
                         userData[sender].lat = event.message.attachments[0].payload.coordinates.lat;
                         userData[sender].lng = event.message.attachments[0].payload.coordinates.long;
                         var offset = getOffset(sender, userData[sender].lat, userData[sender].lng);
-                        console.log("offset: " + offset));
+                        console.log("offset: " + offset);
                         //timeZones[getOffset(sender, userData[sender].lat, userData[sender].lng) + 8].push(sender);
                         sendTextMessage(sender, "Got it! ^_^");
                         userData[sender].state = "DONE";
