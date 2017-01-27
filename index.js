@@ -145,12 +145,12 @@ function getWeather(sender, lat, lng) {
      if (rainTimes.length == 0 || probability <= 0.10) {
          rainMsg = "It will not rain today! 🌞"
      } else if (rainTimes.length == 3) {
-         rainMsg += rainTimes[0] + " today" + rainTimes[1] + rainTimes[2] + ". ";
+         rainMsg += rainTimes[0] + " today" + rainTimes[1] + rainTimes[2];
      } else if (rainTimes.length == 6) {
          if (rainTimes[0] === rainTimes[3]) {
-             rainMsg += rainTimes[0] + " today" + rainTimes[1] + rainTimes[2] + " and" + rainTimes[4] + rainTimes[5] + ".";
+             rainMsg += rainTimes[0] + " today" + rainTimes[1] + rainTimes[2] + " and" + rainTimes[4] + rainTimes[5];
          } else {
-             rainMsg += rainTimes[0] + " today" + rainTimes[1] + rainTimes[2] + " and" + rainTimes[3] + rainTimes[4] + rainTimes[5] + ".";
+             rainMsg += rainTimes[0] + " today" + rainTimes[1] + rainTimes[2] + " and" + rainTimes[3] + rainTimes[4] + rainTimes[5];
          }
      } else {
          rainMsg = "Today it will " + rainTimes[0] + rainTimes[1] + rainTimes[2] + ",";
@@ -165,6 +165,11 @@ function getWeather(sender, lat, lng) {
              rainMsg += rainTimes[rainTimes.length - 3];
          }
          rainMsg += rainTimes[rainTimes.length - 2] + rainTimes[rainTimes.length - 1] + ".";
+     }
+     if (rainTimes[0] === "rain" && probability >= 0.25) {
+         rainMsg += ". ☔";
+     } else {
+         rainMsg += ".";
      }
      return sendTextMessage(sender, rainMsg);
  }
