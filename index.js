@@ -97,6 +97,7 @@ function getWeather(sender, lat, lng) {
          } else {
              var weatherData = JSON.parse(body);
              var offset = weatherData.offset;
+             console.log(offset);
              return offset;
          }
      })
