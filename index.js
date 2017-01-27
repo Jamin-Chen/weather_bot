@@ -142,7 +142,7 @@ function getWeather(sender, lat, lng) {
          rainMsg = "It will "
      }
 
-     if (rainTimes.length == 0 || probability <= 0.10) {
+     if (rainTimes.length === 0 || probability <= 0.10) {
          rainMsg = "It will not rain today! 🌞"
      } else if (rainTimes.length == 3) {
          rainMsg += rainTimes[0] + " today" + rainTimes[1] + rainTimes[2];
@@ -168,7 +168,7 @@ function getWeather(sender, lat, lng) {
      }
      if (rainTimes[0] === "rain" && probability >= 0.25) {
          rainMsg += ". ☔";
-     } else {
+     } else if (rainTimes.length != 0) {
          rainMsg += ".";
      }
      return sendTextMessage(sender, rainMsg);
