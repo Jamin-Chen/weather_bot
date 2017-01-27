@@ -51,7 +51,6 @@ app.post('/webhook', function (req, res) {
                         userData[sender].lat = event.message.attachments[0].payload.coordinates.lat;
                         userData[sender].lng = event.message.attachments[0].payload.coordinates.long;
                         setOffset(sender, userData[sender].lat, userData[sender].lng);
-                        console.log(offset);
                         sendTextMessage(sender, "Got it! ^_^");
                         userData[sender].state = "DONE";
                         break;
@@ -98,7 +97,7 @@ function getWeather(sender, lat, lng) {
              var weatherData = JSON.parse(body);
              var offset = weatherData.offset;
              console.log("Offset: " + offset);
-             return timeZones[getOffset(sender, userData[sender].lat, userData[sender].lng) + 8].push(sender);
+             return timeZones[offset + 8].push(sender);
          }
      })
  }
