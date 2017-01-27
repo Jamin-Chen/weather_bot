@@ -52,7 +52,6 @@ app.post('/webhook', function (req, res) {
                         userData[sender].lng = event.message.attachments[0].payload.coordinates.long;
                         setOffset(sender, userData[sender].lat, userData[sender].lng);
                         sendTextMessage(sender, "Got it! ^_^");
-                        userData[sender].state = "DONE";
                         break;
                     }
             } else {
@@ -97,7 +96,12 @@ function getWeather(sender, lat, lng) {
              var weatherData = JSON.parse(body);
              var offset = weatherData.offset;
              console.log("Offset: " + offset);
+             if (offset < -8 || offset > -5) {
+                 userData[sender].state = "SET_LOCATION";
+                 return promptLocationError_NotUS(sender);
+             }
              timeZones[offset + 8].push(sender);
+             userData[sender].state = "DONE";
              return printTimezones();
          }
      })
@@ -271,6 +275,17 @@ function promptLocation(recipientId) {
 function promptLocationError(recipientId) {
     sendMessage(recipientId, {
         "text":"Whoops, I'm not smart enough to read that! Please send me your location through messenger. 📍",
+        "quick_replies":[
+          {
+            "content_type":"location",
+          }
+        ]
+    });
+};
+
+function promptLocationError_NotUS(recipientId) {
+    sendMessage(recipientId, {
+        "text":"Sorry, I can only send you daily reminders if you're located in the U.S.!",
         "quick_replies":[
           {
             "content_type":"location",
