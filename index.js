@@ -53,7 +53,6 @@ app.post('/webhook', function (req, res) {
                         setOffset(sender, userData[sender].lat, userData[sender].lng);
                         sendTextMessage(sender, "Got it! ^_^");
                         userData[sender].state = "DONE";
-                        printTimezones();
                         break;
                     }
             } else {
@@ -98,7 +97,8 @@ function getWeather(sender, lat, lng) {
              var weatherData = JSON.parse(body);
              var offset = weatherData.offset;
              console.log("Offset: " + offset);
-             return timeZones[offset + 8].push(sender);
+             timeZones[offset + 8].push(sender);
+             return printTimezones();
          }
      })
  };
