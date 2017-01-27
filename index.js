@@ -5,6 +5,7 @@ var express = require('express'),
 var app = express();
 
 var userData = {};
+var timeZones = [[],[],[],[]];
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
@@ -49,7 +50,9 @@ app.post('/webhook', function (req, res) {
                     case "SET_LOCATION":
                         userData[sender].lat = event.message.attachments[0].payload.coordinates.lat;
                         userData[sender].lng = event.message.attachments[0].payload.coordinates.long;
-                        getWeather(sender, userData[sender].lat, userData[sender].lng);
+                        timeZones[getOffset(sender, userData[sender].lat, userData[sender].lng) + 8].push(sender);
+                        sendTextMessage(sender, "Got it! ^_^");
+                        userData[sender].state = "DONE";
                         break;
                     }
             } else {
@@ -78,6 +81,24 @@ function getWeather(sender, lat, lng) {
         }
     })
  };
+
+ function getOffset(sender, lat, lng) {
+     url = 'https://api.darksky.net/forecast/' + process.env.DARKSKY_API_KEY + '/' + lat + ',' + lng + ',' + Math.floor(Date.now()/1000);
+     console.log(url);
+     request({
+         url: url,
+         method: 'GET',
+     }, function (error, response, body) {
+         if (error) {
+             return console.log('Error:', error);
+         } else if (response.statusCode !== 200) {
+             return console.log('Invalid status code:', response.statusCode)
+         } else {
+             var weatherData = JSON.parse(body);
+             return weatherData.offset;
+         }
+     })
+ }
 
  function checkRain(sender, weatherData){
      var rainTimes = [];
