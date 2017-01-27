@@ -37,6 +37,7 @@ app.post('/webhook', function (req, res) {
         let event = events[i];
         let sender = event.sender.id;
         if (event.message) {
+            console.log(typeof(userData[sender]));
             if (typeof(userData[sender]) === 'undefined') {
                 // first time visitor, initalize data
                 userData[sender] = {};
@@ -120,7 +121,7 @@ function getWeather(sender, lat, lng) {
              rainTimes.push(" from 11 ");
              rainTimes.push(" and continue through the night");
          }
-         if (precipitating && hour.precipProbability > 0.1) {
+         if (precipitating && hour.precipProbability > 0.1 && hour.precipIntensity > 0.01) {
              intensity += hour.precipIntensity;
              probability += hour.precipProbability;
              n++;
@@ -146,7 +147,7 @@ function getWeather(sender, lat, lng) {
          rainMsg = "It will not rain today! 🌞"
          return sendTextMessage(sender, rainMsg);
      } else if (rainTimes.length === 3 && rainTimes[1] === " from 12 AM" && rainTimes[2] === " and continue through the night") {
-         rainMsg = "Looks like it's gonna " + rainTimes[0] + " the whole day today! ☔"
+         rainMsg = "Looks like it's gonna " + rainTimes[0] + " the whole day today! ☔";
          return sendTextMessage(sender, rainMsg);
      } else if (rainTimes.length === 3) {
          rainMsg += rainTimes[0] + " today" + rainTimes[1] + rainTimes[2];
