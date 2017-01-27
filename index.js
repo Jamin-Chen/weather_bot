@@ -1,20 +1,14 @@
 var express = require('express'),
     bodyParser = require('body-parser'),
     request = require('request'),
-    path = require('path'),
-    yql = require('yql');
+    path = require('path');
 var app = express();
 
 var userData = {};
-var weatherData;
-var apiKey = 'bbadefd60b9bac38f09923a97dc42316';
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.listen((process.env.PORT || 3000));
-
-var APPID = '';	// Your Yahoo Application ID
-var DEG = 'c';	// c for celsius, f for fahrenheit
 
 app.get('/', function (request, response) {
     // boot boot
@@ -68,7 +62,7 @@ app.post('/webhook', function (req, res) {
 });
 
 function getWeather(sender, lat, lng) {
-    url = 'https://api.darksky.net/forecast/' + apiKey + '/' + lat + ',' + lng + ',' + Math.floor(Date.now()/1000);
+    url = 'https://api.darksky.net/forecast/' + process.env.DARKSKY_API_KEY + '/' + lat + ',' + lng + ',' + Math.floor(Date.now()/1000);
     console.log(url);
     request({
         url: url,
@@ -144,14 +138,18 @@ function getWeather(sender, lat, lng) {
      }
 
      if (rainTimes.length === 0 || probability <= 0.10) {
-         rainMsg = "It will not rain today! 🌞"
+         // Will not rain
+         rainMsg = "It will not rain today! ☀️️"
          return sendTextMessage(sender, rainMsg);
      } else if (rainTimes.length === 3 && rainTimes[1] === " from 12 AM" && rainTimes[2] === " and continue through the night") {
+         // Raining the whole day
          rainMsg = "Looks like it's gonna " + rainTimes[0] + " the whole day today! ☔";
          return sendTextMessage(sender, rainMsg);
      } else if (rainTimes.length === 3) {
+         // One period of rain
          rainMsg += rainTimes[0] + " today" + rainTimes[1] + rainTimes[2];
      } else if (rainTimes.length === 6) {
+         //
          if (rainTimes[0] === rainTimes[3]) {
              rainMsg += rainTimes[0] + " today" + rainTimes[1] + rainTimes[2] + " and" + rainTimes[4] + rainTimes[5];
          } else {
@@ -171,8 +169,12 @@ function getWeather(sender, lat, lng) {
          }
          rainMsg += rainTimes[rainTimes.length - 2] + rainTimes[rainTimes.length - 1] + ".";
      }
-     if (rainTimes[0] === "rain" && probability >= 0.25) {
-         rainMsg += ". ☔";
+     if (rainTimes[0] === "rain") {
+         if (probability > 0.25) {
+             rainMsg += ". ☔";
+         } else if (probability <= 0.25) {
+             rainMsg += ". ☁️️"
+         }
      } else if (rainTimes.length != 0) {
          rainMsg += ".";
      }
