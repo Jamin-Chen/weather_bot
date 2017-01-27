@@ -144,8 +144,10 @@ function getWeather(sender, lat, lng) {
 
      if (rainTimes.length === 0 || probability <= 0.10) {
          rainMsg = "It will not rain today! 🌞"
+         return sendTextMessage(sender, rainMsg);
      } else if (rainTimes.length === 3 && rainTimes[1] === " from 12 AM" && rainTimes[2] === " and continue through the night") {
          rainMsg = "Looks like it's gonna " + rainTimes[0] + " the whole day today! ☔"
+         return sendTextMessage(sender, rainMsg);
      } else if (rainTimes.length === 3) {
          rainMsg += rainTimes[0] + " today" + rainTimes[1] + rainTimes[2];
      } else if (rainTimes.length === 6) {
