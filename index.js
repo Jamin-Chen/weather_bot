@@ -41,7 +41,7 @@ app.post('/webhook', function (req, res) {
             } else if (event.message.text) {
                 console.log("Received: " + event.message.text);
                 if (userData[sender].state === "SET_LOCATION") {
-                    sendTextMessage(sender, "Whoops, I'm not smart enough to read that! Please send me your location through messenger. 📍");
+                    promptLocationError(sender);
                 }
             } else if (event.message.attachments[0].payload.coordinates) {
                 // handle LOCATION messages
@@ -50,8 +50,8 @@ app.post('/webhook', function (req, res) {
                     case "SET_LOCATION":
                         userData[sender].lat = event.message.attachments[0].payload.coordinates.lat;
                         userData[sender].lng = event.message.attachments[0].payload.coordinates.long;
-                        console.log(getOffset(sender, userData[sender].lat, userData[sender].lng));
-                        timeZones[getOffset(sender, userData[sender].lat, userData[sender].lng) + 8].push(sender);
+                        console.log("offset: " + getOffset(sender, userData[sender].lat, userData[sender].lng));
+                        //timeZones[getOffset(sender, userData[sender].lat, userData[sender].lng) + 8].push(sender);
                         sendTextMessage(sender, "Got it! ^_^");
                         userData[sender].state = "DONE";
                         break;
@@ -249,6 +249,17 @@ function sendTextMessage(recipientId, text) {
 function promptLocation(recipientId) {
     sendMessage(recipientId, {
         "text":"Where are you located? 🌎",
+        "quick_replies":[
+          {
+            "content_type":"location",
+          }
+        ]
+    });
+};
+
+function promptLocationError(recipientId) {
+    sendMessage(recipientId, {
+        "text":"Whoops, I'm not smart enough to read that! Please send me your location through messenger. 📍",
         "quick_replies":[
           {
             "content_type":"location",
