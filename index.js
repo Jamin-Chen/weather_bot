@@ -50,6 +50,7 @@ app.post('/webhook', function (req, res) {
                     case "SET_LOCATION":
                         userData[sender].lat = event.message.attachments[0].payload.coordinates.lat;
                         userData[sender].lng = event.message.attachments[0].payload.coordinates.long;
+                        console.log(getOffset(sender, userData[sender].lat, userData[sender].lng));
                         timeZones[getOffset(sender, userData[sender].lat, userData[sender].lng) + 8].push(sender);
                         sendTextMessage(sender, "Got it! ^_^");
                         userData[sender].state = "DONE";
