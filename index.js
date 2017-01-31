@@ -1,3 +1,8 @@
+//
+// TODO: Add code to run on SIGTERM
+// http://stackoverflow.com/questions/14939289/easy-way-to-store-json-under-node-js
+//
+
 var express = require('express'),
     bodyParser = require('body-parser'),
     request = require('request'),
@@ -10,6 +15,10 @@ var timeZones = [[],[],[],[]];
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.listen((process.env.PORT || 3000));
+
+process.on('SIGTERM', function () {
+
+})
 
 app.get('/', function (request, response) {
     // boot boot
@@ -51,7 +60,6 @@ app.post('/webhook', function (req, res) {
                         userData[sender].lat = event.message.attachments[0].payload.coordinates.lat;
                         userData[sender].lng = event.message.attachments[0].payload.coordinates.long;
                         setOffset(sender, userData[sender].lat, userData[sender].lng);
-                        sendTextMessage(sender, "Got it! ^_^");
                         break;
                     }
             } else {
@@ -102,6 +110,7 @@ function getWeather(sender, lat, lng) {
              }
              timeZones[offset + 8].push(sender);
              userData[sender].state = "DONE";
+             sendTextMessage(sender, "Got it! ^_^");
              return printTimezones();
          }
      })
